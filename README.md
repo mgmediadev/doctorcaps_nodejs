@@ -1,0 +1,1 @@
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\xampp\htdocs\node-js\doctor-caps-firebase-adminsdk-btq53-e0b82600b8.json"

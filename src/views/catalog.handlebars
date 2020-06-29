@@ -1,0 +1,547 @@
+<div class="col-12">
+    <div class="row my-3">
+        <div class="col-6">
+            <h3 class="display-5">Catalogo</h3>                
+        </div>
+        <div class="col-6">
+            <button class="btn btn-primary float-right newModal" data-titulo="AGREGAR">AGREGAR</button>                 
+        </div>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" class="text-center">Visible</th>
+                <th scope="col" class="text-center">Modelo</th>
+                <th scope="col" class="text-center">Categoría</th>
+                <th scope="col" class="text-center">Marca</th>
+                <th scope="col" class="text-center">Tipo</th>
+                <th scope="col" class="text-center">Precio</th>
+                <th scope="col" class="text-center">Cant.</th>                
+                <th scope="col">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if catalogo}}
+                {{#each catalogo}}
+                    <tr>
+                        <td class="text-center">
+                            {{#if this.activo}}
+                                <span style="font-size: 17px;color:green" title="Visible"><i class="fas fa-eye"></i></span>
+                            {{else}}
+                                <span style="font-size: 17px;color: grey" title="Apagado"></span><i class="fas fa-eye-slash"></i></span>                           
+                            {{/if}}
+                        </td>
+                        <td>{{this.modelo}}</td>                        
+                        <td class="text-center">{{this.categoria}}</td>
+                        <td class="text-center">{{this.marca}}</td>
+                        <td class="text-center">{{this.tipo}}</td>
+                        <td class="text-right">
+                            {{#if this.oferta}}
+                                <span class="oferta" title="Oferta">${{this.oferta}}</span>
+                            {{else}}
+                                ${{this.precio}}
+                            {{/if}}                            
+                        </td>
+                        <td class="text-center">{{this.cantidad}}</td>
+                        <td>
+                            <button class="btn btn-danger float-right delItem" data-codigo="{{this.id}}">BORRAR</button> 
+                            <button class="btn btn-warning float-right mr-2 editModal"
+                                data-titulo="EDITAR"
+                                >EDITAR</button>                           
+                        </td>
+                    </tr>                    
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td colspan="8" class="text-center">No hay productos que mostrar</td>
+                </tr>            
+            {{/if}}
+        </tbody>
+    </table>
+</div>
+
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">AGREGAR</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form id="forma" name="forma" action="/edit-catalog" method="post" encType="multipart/form-data">
+                <input type="hidden" name="codigo" id="codigo" value="">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="form-group">
+                            <label for="categoria">Categoría</label>
+                            <select class="form-control" name="categoria" id="categoria">
+                                <option value="NBA" selected>BASQUETBOL (NBA)</option>
+                                <option value="MLB">BEISBOL (MLB)</option>                                
+                                <option value="NFL">FÚTBOL AMERICANO (NFL)</option>
+                                <option value="BRD">MARCAS</option>
+                                <option value="URB">URBANAS</option>                                
+                                <option value="OTR">OTRAS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="tipo">Tipo</label>
+                            <select class="form-control" name="tipo" id="tipo">
+                                <option value="FITTED" selected>FITTED</option>
+                                <option value="SNAPBACK">SNAPBACK</option>
+                            </select>
+                        </div>
+                    </div>                    
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="visibilidad">Visibilidad</label>
+                            <select class="form-control" name="visibilidad" id="visibilidad">
+                                <option value="1" selected>ACTIVO</option>
+                                <option value="0">APAGADO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>            
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <label for="modelo">Modelo <em>*</em></label>
+                            <input type="text" name="modelo" id="modelo" class="form-control" placeholder="Gorra Speed Race" aria-describedby="modelo" required>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="color">Color</label>
+                            <select class="form-control" name="color" id="color">
+                                <option value="AMARILLO">AMARILLO</option>
+                                <option value="AZUL">AZUL</option>
+                                <option value="BLANCO">BLANCO</option>
+                                <option value="CAFÉ">CAFÉ</option>
+                                <option value="GRIS">GRIS</option>
+                                <option value="MORADO">MORADO</option>
+                                <option value="NEGRO">NEGRO</option>
+                                <option value="ROJO">ROJO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="email">Marca <em>*</em></label>
+                            <input type="text" name="marca" id="marca" class="form-control" placeholder="New Era" aria-describedby="marca" required>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="coleccion">Colección</label>
+                            <input type="text" name="coleccion" id="coleccion" class="form-control" placeholder="Pro Series" aria-describedby="marca">
+                        </div>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="descripcion">Descripción <em>*</em></label>
+                            <textarea name="descripcion" id="descripcion" class="form-control textArea" required></textarea>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="precio">Precio <em>*</em></label>
+                            <input type="text" name="precio" id="precio" class="form-control" placeholder="490" aria-describedby="precio" required>
+                            <small id="infoPrecio" class="form-text text-muted">Precio de Venta.</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="oferta">Oferta</label>
+                            <input type="text" name="oferta" id="oferta" class="form-control" placeholder="320" aria-describedby="oferta">
+                            <small id="infoOferta" class="form-text text-muted">Si existe valor, será el perecio final.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <strong>Publicar Imágenes</strong>
+                        <span class="form-text text-muted">Resolución específica de 400x400px.</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <input type="file" class="form-control-file" name="imagen1" id="imagen1" required>
+                        </div>                        
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <input type="file" class="form-control-file" name="imagen2" id="imagen2">
+                        </div>                        
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <input type="file" class="form-control-file" name="imagen3" id="imagen3">
+                        </div>                        
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <input type="file" class="form-control-file" name="imagen4" id="imagen4">
+                        </div>                        
+                    </div>                    
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-3"><strong>Medidas y unidades disponibles</strong></div>
+                </div>                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group px-3 py-0">
+                            <div class="row">
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="size1" id="size1" required>
+                                        <option value="">MEDIDA</option>
+                                        <option value="0">ONE SIZE</option>
+                                        <option value="6">6"</option>
+                                        <option value="6.125">6 1/8"</option>
+                                        <option value="6.250">6 1/4"</option>
+                                        <option value="6.375">6 3/8"</option>
+                                        <option value="6.500">6 1/2"</option>
+                                        <option value="6.625">6 5/8"</option>
+                                        <option value="6.750">6 3/4"</option>
+                                        <option value="6.875">6 7/8"</option>
+                                        <option value="7">7"</option>
+                                        <option value="7.125">7 1/8"</option>
+                                        <option value="7.250">7 1/4"</option>
+                                        <option value="7.375">7 3/8"</option>
+                                        <option value="7.500">7 1/2"</option>
+                                        <option value="7.625">7 5/8"</option>
+                                        <option value="7.750">7 3/4"</option>
+                                        <option value="7.875">7 7/8"</option>
+                                        <option value="8">8"</option>
+                                        <option value="8.125">8 1/8"</option>
+                                        <option value="8.250">8 1/4"</option>
+                                        <option value="8.375">8 3/8"</option>
+                                        <option value="8.500">8 1/2"</option>
+                                        <option value="8.625">8 5/8"</option>
+                                        <option value="8.750">8 3/4"</option>
+                                        <option value="8.875">8 7/8"</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="cant1" id="cant1" required>
+                                        <option value="">CANT</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>                                
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group px-3 py-0">
+                            <div class="row">
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="size2" id="size2">
+                                        <option value="">MEDIDA</option>
+                                        <option value="0">ONE SIZE</option>
+                                        <option value="6">6"</option>
+                                        <option value="6.125">6 1/8"</option>
+                                        <option value="6.250">6 1/4"</option>
+                                        <option value="6.375">6 3/8"</option>
+                                        <option value="6.500">6 1/2"</option>
+                                        <option value="6.625">6 5/8"</option>
+                                        <option value="6.750">6 3/4"</option>
+                                        <option value="6.875">6 7/8"</option>
+                                        <option value="7">7"</option>
+                                        <option value="7.125">7 1/8"</option>
+                                        <option value="7.250">7 1/4"</option>
+                                        <option value="7.375">7 3/8"</option>
+                                        <option value="7.500">7 1/2"</option>
+                                        <option value="7.625">7 5/8"</option>
+                                        <option value="7.750">7 3/4"</option>
+                                        <option value="7.875">7 7/8"</option>
+                                        <option value="8">8"</option>
+                                        <option value="8.125">8 1/8"</option>
+                                        <option value="8.250">8 1/4"</option>
+                                        <option value="8.375">8 3/8"</option>
+                                        <option value="8.500">8 1/2"</option>
+                                        <option value="8.625">8 5/8"</option>
+                                        <option value="8.750">8 3/4"</option>
+                                        <option value="8.875">8 7/8"</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="cant2" id="cant2">
+                                        <option value="">CANT</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>                                
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group px-3 py-0">
+                            <div class="row">
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="size3" id="size3">
+                                        <option value="">MEDIDA</option>
+                                        <option value="0">ONE SIZE</option>
+                                        <option value="6">6"</option>
+                                        <option value="6.125">6 1/8"</option>
+                                        <option value="6.250">6 1/4"</option>
+                                        <option value="6.375">6 3/8"</option>
+                                        <option value="6.500">6 1/2"</option>
+                                        <option value="6.625">6 5/8"</option>
+                                        <option value="6.750">6 3/4"</option>
+                                        <option value="6.875">6 7/8"</option>
+                                        <option value="7">7"</option>
+                                        <option value="7.125">7 1/8"</option>
+                                        <option value="7.250">7 1/4"</option>
+                                        <option value="7.375">7 3/8"</option>
+                                        <option value="7.500">7 1/2"</option>
+                                        <option value="7.625">7 5/8"</option>
+                                        <option value="7.750">7 3/4"</option>
+                                        <option value="7.875">7 7/8"</option>
+                                        <option value="8">8"</option>
+                                        <option value="8.125">8 1/8"</option>
+                                        <option value="8.250">8 1/4"</option>
+                                        <option value="8.375">8 3/8"</option>
+                                        <option value="8.500">8 1/2"</option>
+                                        <option value="8.625">8 5/8"</option>
+                                        <option value="8.750">8 3/4"</option>
+                                        <option value="8.875">8 7/8"</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="cant3" id="cant3">
+                                        <option value="">CANT</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>                                
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group px-3 py-0">
+                            <div class="row">
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="size4" id="size4">
+                                        <option value="">MEDIDA</option>
+                                        <option value="0">ONE SIZE</option>
+                                        <option value="6">6"</option>
+                                        <option value="6.125">6 1/8"</option>
+                                        <option value="6.250">6 1/4"</option>
+                                        <option value="6.375">6 3/8"</option>
+                                        <option value="6.500">6 1/2"</option>
+                                        <option value="6.625">6 5/8"</option>
+                                        <option value="6.750">6 3/4"</option>
+                                        <option value="6.875">6 7/8"</option>
+                                        <option value="7">7"</option>
+                                        <option value="7.125">7 1/8"</option>
+                                        <option value="7.250">7 1/4"</option>
+                                        <option value="7.375">7 3/8"</option>
+                                        <option value="7.500">7 1/2"</option>
+                                        <option value="7.625">7 5/8"</option>
+                                        <option value="7.750">7 3/4"</option>
+                                        <option value="7.875">7 7/8"</option>
+                                        <option value="8">8"</option>
+                                        <option value="8.125">8 1/8"</option>
+                                        <option value="8.250">8 1/4"</option>
+                                        <option value="8.375">8 3/8"</option>
+                                        <option value="8.500">8 1/2"</option>
+                                        <option value="8.625">8 5/8"</option>
+                                        <option value="8.750">8 3/4"</option>
+                                        <option value="8.875">8 7/8"</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="cant4" id="cant4">
+                                        <option value="">CANT</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>                                
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group px-3 py-0">
+                            <div class="row">
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="size5" id="size5">
+                                        <option value="">MEDIDA</option>
+                                        <option value="0">ONE SIZE</option>
+                                        <option value="6">6"</option>
+                                        <option value="6.125">6 1/8"</option>
+                                        <option value="6.250">6 1/4"</option>
+                                        <option value="6.375">6 3/8"</option>
+                                        <option value="6.500">6 1/2"</option>
+                                        <option value="6.625">6 5/8"</option>
+                                        <option value="6.750">6 3/4"</option>
+                                        <option value="6.875">6 7/8"</option>
+                                        <option value="7">7"</option>
+                                        <option value="7.125">7 1/8"</option>
+                                        <option value="7.250">7 1/4"</option>
+                                        <option value="7.375">7 3/8"</option>
+                                        <option value="7.500">7 1/2"</option>
+                                        <option value="7.625">7 5/8"</option>
+                                        <option value="7.750">7 3/4"</option>
+                                        <option value="7.875">7 7/8"</option>
+                                        <option value="8">8"</option>
+                                        <option value="8.125">8 1/8"</option>
+                                        <option value="8.250">8 1/4"</option>
+                                        <option value="8.375">8 3/8"</option>
+                                        <option value="8.500">8 1/2"</option>
+                                        <option value="8.625">8 5/8"</option>
+                                        <option value="8.750">8 3/4"</option>
+                                        <option value="8.875">8 7/8"</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="cant5" id="cant5">
+                                        <option value="">CANT</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>                                
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group px-3 py-0">
+                            <div class="row">
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="size6" id="size6">
+                                        <option value="">MEDIDA</option>
+                                        <option value="0">ONE SIZE</option>
+                                        <option value="6">6"</option>
+                                        <option value="6.125">6 1/8"</option>
+                                        <option value="6.250">6 1/4"</option>
+                                        <option value="6.375">6 3/8"</option>
+                                        <option value="6.500">6 1/2"</option>
+                                        <option value="6.625">6 5/8"</option>
+                                        <option value="6.750">6 3/4"</option>
+                                        <option value="6.875">6 7/8"</option>
+                                        <option value="7">7"</option>
+                                        <option value="7.125">7 1/8"</option>
+                                        <option value="7.250">7 1/4"</option>
+                                        <option value="7.375">7 3/8"</option>
+                                        <option value="7.500">7 1/2"</option>
+                                        <option value="7.625">7 5/8"</option>
+                                        <option value="7.750">7 3/4"</option>
+                                        <option value="7.875">7 7/8"</option>
+                                        <option value="8">8"</option>
+                                        <option value="8.125">8 1/8"</option>
+                                        <option value="8.250">8 1/4"</option>
+                                        <option value="8.375">8 3/8"</option>
+                                        <option value="8.500">8 1/2"</option>
+                                        <option value="8.625">8 5/8"</option>
+                                        <option value="8.750">8 3/4"</option>
+                                        <option value="8.875">8 7/8"</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <select class="form-control" name="cant6" id="cant6">
+                                        <option value="">CANT</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>                                
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-block">Grabar</button>                                                
+            </form>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<script type="text/javascript">
+    $(document).on("click", ".newModal", function () {
+        $(".modal-title").html('AGREGAR');
+        $('#myModal').modal('show');
+    });
+
+    $(".delItem").on("click", function () {
+        let r = confirm("¿Confirma la eliminación?");
+        if (r == true) {
+            let codigo = $(this).data('codigo');
+            location.href = "/delete-catalog/" + codigo;
+        }        
+    });    
+
+    $(".editModal").on("click", function () {
+        let titulo = $(this).data('titulo');
+
+        if(titulo == "AGREGAR"){
+            $(".modal-title").html('AGREGAR');
+        } else {
+            $(".modal-title").html('EDITAR');
+
+        }
+        $('#myModal').modal('show');
+    });
+</script>

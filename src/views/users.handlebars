@@ -1,0 +1,371 @@
+<div class="col-12">
+    <div class="row my-3">
+        <div class="col-6">
+            <h3 class="display-5">Usuarios</h3>                
+        </div>
+        <div class="col-6">
+            <button class="btn btn-primary float-right newModal">AGREGAR</button>
+        </div>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" class="text-center">Visible</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">E-mail</th>
+                <th scope="col" class="text-center">Teléfono</th>
+                <th scope="col">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if usuarios}}
+                <ul class="list-group">
+                {{#each usuarios}}
+                    <tr>
+                        <td class="text-center">
+                            {{#if activo}}
+                                <span style="font-size: 17px;color:green" title="Visible"><i class="fas fa-eye"></i></span>
+                            {{else}}
+                                <span style="font-size: 17px;color: grey" title="Apagado"></span><i class="fas fa-eye-slash"></i></span>                           
+                            {{/if}}
+                        </td>
+                        <td>
+                            {{#if nombre.[0]}}
+                                {{nombre.[1]}} {{nombre.[2]}}, {{nombre.[0]}}
+                            {{else}}
+                                <span style="color: grey">SIN NOMBRE AÚN</span>
+                            {{/if}}
+                        </td>
+                        <td>{{email}}</td>
+                        <td class="text-center">{{telefono}}</td>
+                        <td>
+                            <button class="btn btn-danger float-right delItem" data-email="{{email}}">BORRAR</button>
+                            <button class="btn btn-warning float-right mr-2 editModal"
+                                data-titulo="EDITAR"
+                                data-visibilidad="{{activo}}"
+                                data-nombre="{{nombre.[0]}}"
+                                data-apellido1="{{nombre.[1]}}"
+                                data-apellido2="{{nombre.[2]}}"
+                                data-email="{{email}}"
+                                data-telefono="{{telefono}}"
+                                data-dir-calle="{{direccion.[0]}}"
+                                data-dir-num-ext="{{direccion.[1]}}"
+                                data-dir-num-int="{{direccion.[2]}}"
+                                data-dir-fracc="{{direccion.[3]}}"
+                                data-dir-ciudad="{{direccion.[4]}}"
+                                data-dir-estado="{{direccion.[5]}}"
+                                data-dir-cp="{{direccion.[6]}}"
+                                data-fnac="{{fecha_nac._seconds}}"
+                            >EDITAR</button>
+                        </td>
+                    </tr>                    
+                {{/each}}
+                </ul>
+            {{else}}
+                <tr>
+                    <td colspan="6" class="text-center">No hay usuarios que mostrar</td>
+                </tr>            
+            {{/if}}
+        </tbody>
+    </table>
+</div>
+
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">AGREGAR</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form action="/new-user" method="post">
+                <div class="row">
+                    <div class="col-10 col-md-9">
+                        <div class="form-group">
+                            <label for="nombre">Nombre <em>*</em></label>
+                            <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Alberto" aria-describedby="nombre" autofocus required>
+                        </div>
+                    </div>
+                    <div class="col-2 col-md-3">
+                        <div class="form-group">
+                            <label for="dir_ciudad">Visibilidad</label>
+                            <select class="form-control" name="visibilidad" id="visibilidad">
+                                <option value="1" selected>ACTIVO</option>
+                                <option value="0">APAGADO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>            
+                <div class="form-group">
+                  <label for="apellido1">Apellido Paterno <em>*</em></label>
+                  <input type="text" name="apellido1" id="apellido1" class="form-control" placeholder="González" aria-describedby="apellido1" required>
+                </div>
+                <div class="form-group">
+                  <label for="apellido2">Apellido Paterno</label>
+                  <input type="text" name="apellido2" id="apellido2" class="form-control" placeholder="Pérez" aria-describedby="apellido2">
+                </div>
+                <div class="row">
+                    <div class="col-5 col-md-5">
+                        <div class="form-group">
+                            <label for="email">E-mail <em>*</em></label>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="nombre@empresa.com" aria-describedby="email" required>
+                        </div>
+                    </div>
+                    <div class="col-5 col-md-4">
+                        <div class="form-group">
+                            <label for="telefono">Teléfono <em>*</em></label>
+                            <input type="tel" name="telefono" id="telefono" class="form-control" placeholder="982879559" aria-describedby="telefono" required>
+                        </div>
+                    </div>
+                    <div class="col-2 col-md-3">
+                        <div class="form-group">
+                            <label for="genero">Género</label>
+                            <select class="form-control" name="genero" id="genero">
+                                <option value="IND" selected>INDEF.</option>
+                                <option value="MUJ">FEME</option>
+                                <option value="HOM">MASC</option>
+                            </select>
+                        </div>
+                    </div>                    
+                </div>                
+                <div class="row">
+                    <div class="col-12 mb-3"><strong>Dirección</strong></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="dir_calle">Calle</label>
+                            <input type="text" name="dir_calle" id="dir_calle" class="form-control" placeholder="Av. Lautaro" aria-describedby="dir_calle">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="dir_num_ext">Núm. Ext.</label>
+                            <input type="text" name="dir_num_ext" id="dir_num_ext" class="form-control" placeholder="1048" aria-describedby="dir_num_ext">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="dir_num_int">Núm. Int.</label>
+                            <input type="text" name="dir_num_int" id="dir_num_int" class="form-control" placeholder="982879559" aria-describedby="dir_num_int">
+                        </div>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="dir_fracc">Fraccionamiento</label>
+                            <input type="text" name="dir_fracc" id="dir_fracc" class="form-control" placeholder="Villa Europea" aria-describedby="dir_fracc">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="dir_ciudad">Ciudad</label>
+                            <input type="text" name="dir_ciudad" id="dir_ciudad" class="form-control" placeholder="Hermosillo" aria-describedby="dir_ciudad">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="dir_estado">Estado</label>
+                            <input type="text" name="dir_estado" id="dir_estado" class="form-control" placeholder="Sonora" aria-describedby="dir_estado" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="dir_cp">Código Postal</label>
+                            <input type="text" name="dir_cp" id="dir_cp" class="form-control" placeholder="83000" aria-describedby="dir_cp" maxlength="5">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3"><strong>Fecha de nacimiento</strong></div>
+                </div>                
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <select class="form-control" name="fech_dia" id="fech_dia">
+                                <option value="" selected>DÍA</option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <select class="form-control" name="fech_mes" id="fech_mes">
+                                <option value="" selected>MES</option>
+                                <option value="1">ENERO</option>
+                                <option value="2">FEBRERO</option>
+                                <option value="3">MARZO</option>
+                                <option value="4">ABRIL</option>
+                                <option value="5">MAYO</option>
+                                <option value="6">JUNIO</option>
+                                <option value="7">JULIO</option>
+                                <option value="8">AGOSTO</option>
+                                <option value="9">SEPTIEMBRE</option>
+                                <option value="10">OCTUBRE</option>
+                                <option value="11">NOVIEMBRE</option>
+                                <option value="12">DICIEMBRE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <select class="form-control" name="fech_anno" id="fech_anno">
+                                <option value="" selected>AÑO</option>
+                                <option value="2010">2010</option>
+                                <option value="2009">2009</option>
+                                <option value="2008">2008</option>
+                                <option value="2007">2007</option>
+                                <option value="2006">2006</option>
+                                <option value="2005">2005</option>
+                                <option value="2004">2004</option>
+                                <option value="2003">2003</option>
+                                <option value="2002">2002</option>
+                                <option value="2001">2001</option>
+                                <option value="2000">2000</option>
+                                <option value="1999">1999</option>
+                                <option value="1998">1998</option>
+                                <option value="1997">1997</option>
+                                <option value="1996">1996</option>
+                                <option value="1995">1995</option>
+                                <option value="1994">1994</option>
+                                <option value="1993">1993</option>
+                                <option value="1992">1992</option>
+                                <option value="1991">1991</option>
+                                <option value="1990">1990</option>
+                                <option value="1989">1989</option>
+                                <option value="1988">1988</option>
+                                <option value="1987">1987</option>
+                                <option value="1986">1986</option>
+                                <option value="1985">1985</option>
+                                <option value="1984">1984</option>
+                                <option value="1983">1983</option>
+                                <option value="1982">1982</option>
+                                <option value="1981">1981</option>
+                                <option value="1980">1980</option>
+                                <option value="1979">1979</option>
+                                <option value="1978">1978</option>
+                                <option value="1977">1977</option>
+                                <option value="1976">1976</option>
+                                <option value="1975">1975</option>
+                                <option value="1974">1974</option>
+                                <option value="1973">1973</option>
+                                <option value="1972">1972</option>
+                                <option value="1971">1971</option>
+                                <option value="1970">1970</option>
+                                <option value="1969">1969</option>
+                                <option value="1968">1968</option>
+                                <option value="1967">1967</option>
+                                <option value="1966">1966</option>
+                                <option value="1965">1965</option>
+                            </select>
+                        </div>
+                    </div>                    
+                </div>                                                                   
+                <button class="btn btn-primary btn-block">Grabar</button>                                                
+            </form>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<script type="text/javascript">
+    $(document).on("click", ".newModal", function () {
+        $(".modal-title").html('AGREGAR');
+        $("#visibilidad").val(1);     
+        $("#nombre").val('');     
+        $("#apellido1").val('');
+        $("#apellido2").val('');
+        $("#email").val('');
+        $("#telefono").val('');
+        $("#dir_calle").val('');
+        $("#dir_num_ext").val('');
+        $("#dir_num_int").val('');
+        $("#dir_fracc").val('');
+        $("#dir_ciudad").val('');
+        $("#dir_estado").val('');
+        $("#dir_cp").val('');
+        $("#fech_dia").val('');
+        $("#fech_mes").val('');
+        $("#fech_anno").val('');
+
+        $('#myModal').modal('show');
+    });
+
+    $(".delItem").on("click", function () {
+        let r = confirm("¿Confirma la eliminación?");
+        if (r == true) {
+            let codigo = $(this).data('email');
+            location.href = "/delete-user/" + codigo;
+        }        
+    });    
+
+    $(".editModal").on("click", function () {
+        let titulo = $(this).data('titulo');
+
+        if(titulo == "AGREGAR"){
+            $(".modal-title").html('AGREGAR');
+        } else {
+
+            var fech = new Date($(this).data('fnac') * 1000);
+            var anno = fech.getFullYear();
+            var mes  = fech.getMonth() + 1;
+            var dia  = fech.getDate();
+
+            $(".modal-title").html('EDITAR');
+            $("#visibilidad").val($(this).data('visibilidad'));     
+            $("#nombre").val($(this).data('nombre'));     
+            $("#apellido1").val($(this).data('apellido1'));     
+            $("#apellido2").val($(this).data('apellido2'));
+            $("#email").val($(this).data('email'));
+            $("#telefono").val($(this).data('telefono'));                         
+            $("#dir_calle").val($(this).data('dir-calle'));
+            $("#dir_num_ext").val($(this).data('dir-num-ext'));
+            $("#dir_num_int").val($(this).data('dir-num-int'));
+            $("#dir_fracc").val($(this).data('dir-fracc'));
+            $("#dir_ciudad").val($(this).data('dir-ciudad'));
+            $("#dir_estado").val($(this).data('dir-estado'));
+            $("#dir_cp").val($(this).data('dir-cp'));
+            $("#fech_dia").val(dia);
+            $("#fech_mes").val(mes);
+            $("#fech_anno").val(anno);
+        }
+        $('#myModal').modal('show');
+    });
+</script>

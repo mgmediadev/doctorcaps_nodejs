@@ -1,0 +1,10 @@
+.oferta {
+    background-color: green;
+    border-radius: 3px;
+    color: white;
+    padding: 3px 6px;
+}
+.textArea {
+    height: 80px !important;
+    resize: none;
+}
